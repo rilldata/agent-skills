@@ -12,6 +12,7 @@ npx skills add rilldata/agent-skills
 
 Then agents can use `rilldata` or the resource-specific router skills.
 Project-level configuration guidance (`rill.yaml`) is part of `rilldata`.
+ClickHouse model optimization workflows can use `rill-clickhouse` (requires the external ClickHouse skill pack).
 
 ## Included Skills
 
@@ -30,6 +31,11 @@ Project-level configuration guidance (`rill.yaml`) is part of `rilldata`.
   - Router skill for explore-dashboard-focused tasks.
 - `skills/rill-canvas`
   - Router skill for canvas-dashboard/component-focused tasks.
+- `skills/rill-clickhouse`
+  - Router skill for analyzing/refactoring existing Rill models and creating new ClickHouse models from source inputs (for example S3 paths).
+  - Orchestrates `rilldata` plus `clickhouse-best-practices` rules.
+  - Uses a checklist-first, approval-gated workflow and creates connector artifacts only when required.
+  - Requires `https://github.com/ClickHouse/agent-skills` to be installed.
 
 ## Structure
 
@@ -37,4 +43,5 @@ Project-level configuration guidance (`rill.yaml`) is part of `rilldata`.
 - `skills/rilldata/rules/*.md`: modular rules with source links
 - `skills/rilldata/AGENTS.md`: compiled reference guide
 - `skills/rill-*/SKILL.md`: lightweight router skills that reference the shared canonical rules in `skills/rilldata/rules/*`
+- `skills/rill-clickhouse/SKILL.md`: dual-mode ClickHouse-focused Rill model review/refactor and create-from-scratch workflow
 - `packages/rilldata-build/`: sync/build/validate tooling

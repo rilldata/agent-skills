@@ -13,6 +13,9 @@ This repository packages modular agent skills for Rill.
   - lightweight router skills
   - no duplicated rule content
   - reference subsets of `skills/rilldata/rules/*`
+- `skills/rill-clickhouse/`
+  - ClickHouse-focused router skill for Rill model diagnostics/refactoring and create-from-scratch model generation from source info
+  - orchestrates `rilldata` and external `clickhouse-best-practices` guidance
 - `packages/rilldata-build/`
   - `src/sync-rules-from-sources.mjs`: generate rules from Rill source docs
   - `src/validate.mjs`: validate rules and section mapping
