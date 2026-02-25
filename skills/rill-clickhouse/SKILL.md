@@ -15,8 +15,14 @@ Keep existing model intent when refactoring and avoid unnecessary churn.
 ## 1. Prerequisite Check (Hard Gate)
 
 1. Confirm the `clickhouse-best-practices` skill is available and installed from `https://github.com/ClickHouse/agent-skills`.
-2. If the skill is missing or install origin cannot be confirmed, stop immediately and instruct the user to install it before continuing.
-3. Do not run diagnostics, propose plans, or generate model files until the prerequisite is satisfied.
+2. If the skill is missing or install origin cannot be confirmed, stop immediately and help the user install it with:
+
+```bash
+npx skills add clickhouse/agent-skills
+```
+
+3. After providing the install command, instruct the user to rerun the task once installation is complete.
+4. Do not run diagnostics, propose plans, or generate model files until the prerequisite is satisfied.
 
 ## 2. Load Required Guidance
 
