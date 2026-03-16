@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Rill
-        run: curl https://rill.sh | sh -s -- --nightly
+        run: curl https://cdn.rilldata.com/rill/nightly/install.sh | sh -s -- --nightly
 
       - name: Run sync script
         run: ./sync.sh
