@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Rill
-        run: curl https://raw.githubusercontent.com/rilldata/rill/d63cd7b3334ba6a604697911e6578593cf067152/scripts/install.sh | sudo sh -s -- --nightly
+        run: curl https://raw.githubusercontent.com/rilldata/rill/053a3da57c8ab663ce4741ff9c21f655772e8da5/scripts/install.sh | sudo sh -s -- --nightly
 
       - name: Run sync script
         run: ./sync.sh
