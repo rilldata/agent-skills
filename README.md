@@ -4,11 +4,20 @@ Installable, modular skills for AI agents working with Rill.
 
 ## Installation
 
-Install using the [`npx skills`](https://github.com/vercel-labs/skills) utility:
+### Using npx skills
 
 ```bash
 npx skills add rilldata/agent-skills
 ```
+
+### As a Claude Code plugin
+
+```bash
+/plugin marketplace add rilldata/agent-skills
+/plugin install rill@rilldata
+```
+
+> **Note:** The MCP tools require a running Rill Developer server (`rill start`) on `localhost:9009`.
 
 ## Contents
 
