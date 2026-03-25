@@ -464,11 +464,11 @@ allOf:
             - allow_host_access: true
               aws_access_key_id: '{{ .env.AWS_ACCESS_KEY_ID }}'
               aws_access_token: '{{ .env.AWS_ACCESS_TOKEN }}'
-              aws_region: us-east-1
               aws_secret_access_key: '{{ .env.AWS_SECRET_ACCESS_KEY }}'
               driver: athena
               external_id: MyExternalID
               output_location: s3://my-bucket/athena-output/
+              region: us-east-1
               role_arn: arn:aws:iam::123456789012:role/MyRole
               role_session_name: MySession
               type: connector
@@ -483,9 +483,6 @@ allOf:
             aws_access_token:
                 description: AWS session token used with temporary credentials. Required only if the Access Key and Secret Key are part of a temporary session credentials.
                 type: string
-            aws_region:
-                description: AWS region where Athena and the result S3 bucket are located (e.g., us-east-1). Defaults to 'us-east-1' if not specified.
-                type: string
             aws_secret_access_key:
                 description: AWS Secret Access Key paired with the Access Key ID. Required when using static credentials directly or as base credentials for assuming a role.
                 type: string
@@ -498,6 +495,9 @@ allOf:
                 type: string
             output_location:
                 description: S3 URI where Athena query results should be stored (e.g., s3://your-bucket/athena/results/). Optional if the selected workgroup has a default result configuration.
+                type: string
+            region:
+                description: AWS region where Athena and the result S3 bucket are located (e.g., us-east-1). Defaults to 'us-east-1' if not specified.
                 type: string
             role_arn:
                 description: ARN of the IAM role to assume. When specified, the SDK uses the base credentials to call STS AssumeRole and obtain temporary credentials scoped to this role.
@@ -562,9 +562,6 @@ allOf:
             allow_host_access:
                 description: Enable the BigQuery client to use credentials from the host environment when no service account JSON is provided. This includes Application Default Credentials from environment variables, local credential files, or the Google Compute Engine metadata server. Defaults to true, allowing seamless authentication in GCP environments.
                 type: boolean
-            dataset_id:
-                description: BigQuery dataset ID
-                type: string
             driver:
                 const: bigquery
                 description: Refers to the driver type and must be driver `bigquery`
@@ -572,9 +569,9 @@ allOf:
             google_application_credentials:
                 description: Raw contents of the Google Cloud service account key (in JSON format) used for authentication.
                 type: string
-            location:
-                description: BigQuery dataset location
-                type: string
+            log_queries:
+                description: Controls whether to log raw SQL queries
+                type: boolean
             project_id:
                 description: Google Cloud project ID
                 type: string
@@ -606,6 +603,9 @@ allOf:
                 type: string
             database:
                 description: Name of the ClickHouse database within the cluster
+                type: string
+            database_whitelist:
+                description: Comma-separated list of databases to show
                 type: string
             dial_timeout:
                 description: Timeout for dialing the ClickHouse server
@@ -658,6 +658,9 @@ allOf:
                 type: boolean
             username:
                 description: Username for authentication
+                type: string
+            write_dsn:
+                description: Separate connection string for write operations
                 type: string
           required:
             - driver
@@ -948,6 +951,9 @@ allOf:
             host:
                 description: Hostname of the MySQL server
                 type: string
+            log_queries:
+                description: Controls whether to log raw SQL queries
+                type: boolean
             password:
                 description: Password for authentication
                 type: string
@@ -1153,6 +1159,9 @@ allOf:
             host:
                 description: StarRocks FE (Frontend) server hostname
                 type: string
+            log_queries:
+                description: Controls whether to log raw SQL queries
+                type: boolean
             password:
                 description: Password for authentication
                 type: string
@@ -1222,6 +1231,9 @@ allOf:
             host:
                 description: Hostname of the Postgres server
                 type: string
+            log_queries:
+                description: Controls whether to log raw SQL queries
+                type: boolean
             password:
                 description: Password for authentication
                 type: string
@@ -1271,6 +1283,9 @@ allOf:
             host:
                 description: Hostname of the Supabase database (e.g. aws-0-us-east-1.pooler.supabase.com)
                 type: string
+            log_queries:
+                description: Controls whether to log raw SQL queries
+                type: boolean
             password:
                 description: Password for authentication
                 type: string
@@ -1298,6 +1313,9 @@ allOf:
               type: connector
               workgroup: my-workgroup
           properties:
+            allow_host_access:
+                description: Allow access to host environment configuration
+                type: boolean
             aws_access_key_id:
                 description: AWS Access Key ID used for authenticating with Redshift.
                 type: string
@@ -1316,6 +1334,9 @@ allOf:
             driver:
                 description: Refers to the driver type and must be driver `redshift`
                 type: string
+            log_queries:
+                description: Controls whether to log raw SQL queries
+                type: boolean
             region:
                 description: AWS region where the Redshift cluster or workgroup is hosted (e.g., 'us-east-1').
                 type: string
@@ -1430,6 +1451,9 @@ allOf:
             dsn:
                 description: "DSN (Data Source Name) for the Snowflake connection.\n\nThis is intended for **advanced configuration** where you want to specify\nproperties that are not explicitly defined above.  \nIt can only be used when the other connection fields (account, user, password,\ndatabase, schema, warehouse, role, authenticator, privateKey) are **not used**.\n\nFor details on private key generation and encoding, see the `privateKey` property.\n"
                 type: string
+            log_queries:
+                description: Controls whether to log raw SQL queries
+                type: boolean
             parallel_fetch_limit:
                 description: Maximum number of concurrent fetches during query execution.
                 type: integer
