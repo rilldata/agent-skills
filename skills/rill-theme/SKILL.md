@@ -301,6 +301,17 @@ examples:
         primary: '#14B8A6'
         secondary: '#10B981'
       type: theme
+    - dark:
+        kpi-negative: '#f87171'
+        kpi-positive: '#4ade80'
+        primary: '#818cf8'
+        secondary: '#a78bfa'
+      light:
+        kpi-negative: '#dc2626'
+        kpi-positive: '#16a34a'
+        primary: '#6366f1'
+        secondary: '#8b5cf6'
+      type: theme
 id: themes
 title: Theme YAML
 type: object
