@@ -237,6 +237,12 @@ allOf:
         dark:
             description: Dark theme color configuration
             properties:
+                kpi-negative:
+                    description: Color for negative KPI delta values in dark theme. Defaults to red.
+                    type: string
+                kpi-positive:
+                    description: Color for positive KPI delta values in dark theme. Defaults to fg-secondary (gray).
+                    type: string
                 primary:
                     description: Primary color for dark theme. Can have any hex, [named colors](https://www.w3.org/TR/css-color-4/#named-colors) or hsl() formats.
                     type: string
@@ -252,6 +258,12 @@ allOf:
         light:
             description: Light theme color configuration
             properties:
+                kpi-negative:
+                    description: Color for negative KPI delta values in light theme. Defaults to red.
+                    type: string
+                kpi-positive:
+                    description: Color for positive KPI delta values in light theme. Defaults to fg-secondary (gray).
+                    type: string
                 primary:
                     description: Primary color for light theme. Can have any hex, [named colors](https://www.w3.org/TR/css-color-4/#named-colors) or hsl() formats.
                     type: string
