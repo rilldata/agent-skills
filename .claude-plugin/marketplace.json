@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "rill",
-      "source": ".",
+      "source": "./",
       "description": "Skills for developing and querying projects in the Rill business intelligence platform"
     }
   ]
