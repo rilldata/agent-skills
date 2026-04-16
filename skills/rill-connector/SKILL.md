@@ -708,7 +708,6 @@ allOf:
                 type: string
           required:
             - driver
-            - dsn
           title: Druid
           type: object
         - examples:
@@ -810,7 +809,6 @@ allOf:
                 type: string
           required:
             - driver
-            - db
           title: External DuckDB
           type: object
         - examples:
@@ -841,7 +839,6 @@ allOf:
                 type: string
           required:
             - driver
-            - bucket
           title: GCS
           type: object
         - examples:
@@ -870,7 +867,6 @@ allOf:
                     - array
           required:
             - driver
-            - path
           title: HTTPS
           type: object
         - examples:
@@ -1126,9 +1122,6 @@ allOf:
                 type: string
           required:
             - driver
-            - dsn
-            - broker_host
-            - controller_host
           title: Pinot
           type: object
         - examples:
@@ -1400,7 +1393,6 @@ allOf:
                 type: string
           required:
             - driver
-            - bucket
           title: S3
           type: object
         - examples:

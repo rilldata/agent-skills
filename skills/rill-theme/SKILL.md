@@ -282,7 +282,6 @@ allOf:
             type: string
       required:
         - type
-        - display_name
       title: Properties
       type: object
     - $ref: '#/definitions/common_properties'

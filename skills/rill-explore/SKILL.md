@@ -253,7 +253,6 @@ allOf:
             type: string
       required:
         - type
-        - display_name
         - metrics_view
       title: Properties
       type: object

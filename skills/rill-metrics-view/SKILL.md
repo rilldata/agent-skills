@@ -421,46 +421,7 @@ allOf:
                         description: Refers to the schema to use in the OLAP engine (to be used in conjunction with table). Otherwise, will use the default database or schema if not specified
                         type: string
                     measures:
-                        anyOf:
-                            - description: Simple field name as a string.
-                              type: string
-                            - description: List of field selectors, each can be a string or an object with detailed configuration.
-                              items:
-                                anyOf:
-                                    - description: Shorthand field selector, interpreted as the name.
-                                      type: string
-                                    - additionalProperties: false
-                                      description: Detailed field selector configuration with name and optional time grain.
-                                      properties:
-                                        name:
-                                            description: Name of the field to select.
-                                            type: string
-                                        time_grain:
-                                            description: Time grain for time-based dimensions.
-                                            enum:
-                                                - ""
-                                                - ms
-                                                - millisecond
-                                                - s
-                                                - second
-                                                - min
-                                                - minute
-                                                - hadditionalProperties: fal
-                                                - hour
-                                                - d
-                                                - day
-                                                - w
-                                                - week
-                                                - month
-                                                - q
-                                                - quarter
-                                                - "y"
-                                                - year
-                                            type: string
-                                      required:
-                                        - name
-                                      type: object
-                              type: array
+                        $ref: '#/definitions/field_selector_properties'
                         description: Specifies which measures to apply the annotation to. Applies to all measures if not specified
                     model:
                         description: Refers to the model powering the annotation (either table or model is required). The model must have 'time' and 'description' columns. Optional columns include 'time_end' for range annotations and 'grain' to specify when the annotation should appear based on dashboard grain level.
@@ -649,8 +610,6 @@ allOf:
                         description: A measure window can be defined as a keyword string (e.g. 'time' or 'all') or an object with detailed window configuration. For more information, see the [window functions](/developers/build/metrics-view/measures/windows) documentation.
                 required:
                     - name
-                    - display_name
-                    - expression
                 type: object
             type: array
         model:
