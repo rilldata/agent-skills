@@ -21,8 +21,15 @@ npx skills add rilldata/agent-skills
 
 ## Contents
 
-- `AGENTS.md`: high-level instructions for developing a Rill project
-- `skills/rill-<resource type>`: contains detailed instructions and a syntax reference for a resource type in Rill (model, metrics view, etc.)
+- `AGENTS.md`: short instruction file directing agents to load the Rill skills
+- `skills/rill-development`: high-level instructions for developing a Rill project
+- `skills/rill-canvas`: detailed instructions and syntax reference for Rill canvas dashboards
+- `skills/rill-connector`: detailed instructions and syntax reference for Rill connectors
+- `skills/rill-explore`: detailed instructions and syntax reference for Rill explore dashboards
+- `skills/rill-metrics-view`: detailed instructions and syntax reference for Rill metrics views
+- `skills/rill-model`: detailed instructions and syntax reference for Rill models
+- `skills/rill-rillyaml`: detailed instructions and syntax reference for the `rill.yaml` project file
+- `skills/rill-theme`: detailed instructions and syntax reference for Rill themes
 
 ## How it works
 
