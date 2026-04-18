@@ -572,6 +572,9 @@ allOf:
             log_queries:
                 description: Controls whether to log raw SQL queries
                 type: boolean
+            max_bytes_billed:
+                description: Maximum number of bytes billed for a query. Queries that exceed this limit will fail with an error. This can help prevent unexpectedly high costs from large queries. It is highly recommended to set this when running on `on-demand pricing` model. The default value is 0 i.e. no limits are enforced in Rill.
+                type: integer
             project_id:
                 description: Google Cloud project ID
                 type: string
