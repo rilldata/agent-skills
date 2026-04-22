@@ -624,6 +624,36 @@ allOf:
         parent_measures:
             $ref: '#/definitions/field_selector_properties'
             description: Optional field selectors for measures to inherit from the parent metrics view.
+        rollups:
+            description: Pre-aggregated rollup tables that can be used to accelerate queries. When a query's dimensions, measures, time grain, and time range match a rollup, the query is automatically routed to the rollup table instead of the base table.
+            items:
+                properties:
+                    database:
+                        description: Refers to the database to use in the OLAP engine
+                        type: string
+                    database_schema:
+                        description: Refers to the schema to use in the OLAP engine
+                        type: string
+                    dimensions:
+                        $ref: '#/definitions/field_selector_properties'
+                        description: Optional field selectors for dimensions to include in the rollup from the base metrics view. If not specified, all dimensions are included.
+                    measures:
+                        $ref: '#/definitions/field_selector_properties'
+                        description: Optional field selectors for measures to include in the rollup from the base metrics view. If not specified, all measures are included.
+                    model:
+                        description: Refers to the model or table powering the rollup (required)
+                        type: string
+                    time_grain:
+                        description: 'The time grain of the rollup (required). Valid values are: millisecond, second, minute, hour, day, week, month, quarter, year'
+                        type: string
+                    time_zone:
+                        description: IANA timezone of the rollup table (e.g. America/New_York). For day+ grains, queries are only routed to the rollup if the query timezone matches.
+                        type: string
+                required:
+                    - model
+                    - time_grain
+                type: object
+            type: array
         security:
             $ref: '#/definitions/security_policy_properties'
             description: Defines a security policy for the dashboard
