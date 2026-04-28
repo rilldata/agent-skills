@@ -670,6 +670,45 @@ allOf:
           title: ClickHouse
           type: object
         - examples:
+            - catalog: my_catalog
+              driver: databricks
+              host: my-databricks-instance.cloud.databricks.com
+              http_path: /sql/1.0/endpoints/1234567890abcdef
+              schema: my_schema
+              token: '{{ .env.DATABRICKS_TOKEN }}'
+              type: connector
+          properties:
+            catalog:
+                description: Default catalog name. Optional.
+                type: string
+            driver:
+                const: databricks
+                description: Refers to the driver type and must be driver `databricks`
+                type: string
+            dsn:
+                description: "DSN (Data Source Name) for the Databricks connection.\n\nThis is intended for **advanced configuration** where you want to specify\nproperties that are not explicitly defined above.  \nIt can only be used when the other connection fields (host, http_path, token, catalog, schema) are **not used**.\nRefer to https://github.com/databricks/databricks-sql-go for the full list of supported DSN parameters and their formats.\n"
+                type: string
+            host:
+                description: Host where the Databricks instance is running
+                type: string
+            http_path:
+                description: HTTP path sets up the endpoint to the warehouse
+                type: string
+            log_queries:
+                description: Controls whether to log raw SQL queries
+                type: boolean
+            schema:
+                description: Default schema name. Optional.
+                type: string
+            token:
+                description: Token sets up the Personal Access Token
+                type: string
+          required:
+            - driver
+            - type
+          title: databricks
+          type: object
+        - examples:
             - driver: druid
               host: localhost
               password: '{{ .env.DRUID_PASSWORD }}'
@@ -1498,6 +1537,7 @@ description: |
 
     ### _OLAP Engines_
     - [**ClickHouse**](#clickhouse) - ClickHouse analytical database
+    - [**Databricks**](#databricks) - Databricks SQL warehouse
     - [**Druid**](#druid) - Apache Druid
     - [**DuckDB**](#duckdb) - Embedded DuckDB engine (default)
     - [**External DuckDB**](#external-duckdb) - External DuckDB database
@@ -1508,6 +1548,7 @@ description: |
     ### _Data Warehouses_
     - [**Athena**](#athena) - Amazon Athena
     - [**BigQuery**](#bigquery) - Google BigQuery
+    - [**Databricks**](#databricks) - Databricks SQL warehouse
     - [**Redshift**](#redshift) - Amazon Redshift
     - [**Snowflake**](#snowflake) - Snowflake data warehouse
 
