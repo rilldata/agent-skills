@@ -1228,6 +1228,9 @@ allOf:
               dsn: '{{ .env.POSTGRES_DSN }}'
               type: connector
           properties:
+            conn_max_lifetime:
+                description: Maximum time a connection may be reused, as a Go duration string (defaults to 1m)
+                type: string
             dbname:
                 description: Name of the Postgres database
                 type: string
@@ -1269,6 +1272,9 @@ allOf:
             log_queries:
                 description: Controls whether to log raw SQL queries
                 type: boolean
+            max_open_conns:
+                description: Maximum number of open connections to the database (defaults to 1)
+                type: integer
             password:
                 description: Password for authentication
                 type: string
@@ -1298,6 +1304,9 @@ allOf:
               dsn: '{{ .env.SUPABASE_DSN }}'
               type: connector
           properties:
+            conn_max_lifetime:
+                description: Maximum time a connection may be reused, as a Go duration string (defaults to 1m)
+                type: string
             dbname:
                 description: Name of the Supabase database
                 type: string
@@ -1321,6 +1330,9 @@ allOf:
             log_queries:
                 description: Controls whether to log raw SQL queries
                 type: boolean
+            max_open_conns:
+                description: Maximum number of open connections to the database (defaults to 1)
+                type: integer
             password:
                 description: Password for authentication
                 type: string
