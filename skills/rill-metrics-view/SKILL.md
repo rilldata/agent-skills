@@ -434,6 +434,25 @@ allOf:
                         type: string
                 type: object
             type: array
+        cache:
+            description: |
+                Enable caching of query results for metrics views backed by externally-managed tables (e.g. in Snowflake, BigQuery). These settings have no effect for metrics views backed by Rill models (where queries are automatically cached and invalidated when the model is refreshed).
+                Each cache entry is keyed by a hash of the query combined with the latest result of `key_sql`. Cached results stay valid as long as `key_sql` returns the same value; when its result changes, prior results become unreachable. `key_sql` itself runs at most once per `key_ttl`, decoupling freshness checks from query traffic.
+                Example: a `key_sql` of `SELECT MAX(updated_at) FROM orders` with `key_ttl: 5m` checks for new data every 5 minutes but only invalidates cached results when new data has actually landed.
+            properties:
+                enabled:
+                    description: Whether to cache query results for this metrics view. Defaults to false for metrics views backed by externally-managed tables and to true for metrics views backed by a Rill model.
+                    type: boolean
+                key_sql:
+                    description: SQL returning a single value used in the cache key, typically a max timestamp, version, or row count. Cached results are invalidated when this value changes. Optional; defaults to the metrics view's watermark expression (which itself defaults to `MAX(<time dimension>)`).
+                    type: string
+                key_ttl:
+                    description: How often `key_sql` is re-evaluated, as a Go duration string (e.g. `30s`, `5m`, `1h`). The previous result is reused between evaluations. Defaults to `60s`.
+                    type: string
+                timestamps_ttl:
+                    description: When `enabled` is false, Rill still caches the min/max timestamps that are used by the dashboard time picker. This sets a TTL for how long to cache these as a Go duration string. If `enabled` is `true`, then this setting has no effect. Defaults to `5m`.
+                    type: string
+            type: object
         connector:
             description: Refers to the connector type for the metrics view, see [OLAP engines](/developers/build/connectors/olap) for more information
             type: string
