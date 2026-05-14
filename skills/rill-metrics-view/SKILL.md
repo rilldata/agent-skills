@@ -450,7 +450,7 @@ allOf:
                     description: How often `key_sql` is re-evaluated, as a Go duration string (e.g. `30s`, `5m`, `1h`). The previous result is reused between evaluations. Defaults to `60s`.
                     type: string
                 timestamps_ttl:
-                    description: When `enabled` is false, Rill still caches the min/max timestamps that are used by the dashboard time picker. This sets a TTL for how long to cache these as a Go duration string. If `enabled` is `true`, then this setting has no effect. Defaults to `5m`.
+                    description: TTL for caching the min/max timestamp queries used to populate a metrics view's rollups. Only takes effect when the metrics view has rollups defined and query result caching (`enabled`) is off — otherwise rollup timestamps are cached alongside other query results under `key_ttl`. Go duration string (e.g. `5m`). Defaults to `5m`.
                     type: string
             type: object
         connector:
