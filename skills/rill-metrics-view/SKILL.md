@@ -581,6 +581,9 @@ allOf:
                     label:
                         description: a label for your measure, deprecated use display_name
                         type: string
+                    lower_is_better:
+                        description: When true, decreases in this measure are favorable (e.g. bounce rate, latency, error count). UI surfaces that render comparison deltas (KPIs, big numbers, leaderboards, pivot tables, time-series tooltips) swap their positive/negative coloring accordingly.
+                        type: boolean
                     name:
                         description: a stable identifier for the measure
                         type: string
