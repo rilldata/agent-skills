@@ -533,6 +533,9 @@ allOf:
         first_month_of_year:
             description: Refers to the first month of the year for time grain aggregation. The valid values are 1 through 12 where January=1 and December=12
             type: integer
+        max_query_time_range:
+            description: The maximum time span any single query against this metrics view may cover, expressed as an ISO 8601 duration with day-or-larger granularity (e.g. `P90D`, `P3M`, `P1Y`). Sub-day durations such as `PT12H` are not supported. Applies independently to the primary and comparison time ranges. If unset, no limit is enforced.
+            type: string
         measures:
             description: Used to define the numeric aggregates of columns from your data model
             items:
