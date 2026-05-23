@@ -848,6 +848,18 @@ allOf:
                 connector:
                     description: Refers to the connector type for the output table. Can be `clickhouse` or `duckdb` and their named connector
                     type: string
+                create_secrets_from_connectors:
+                    description: List of connector names for which temporary secrets should be created on the output OLAP engine before executing the SQL. Only applies when the output connector is DuckDB. This allows DuckDB-based models to access cloud storage (S3, GCS, Azure) using credentials from named connectors.
+                    examples:
+                        - create_secrets_from_connectors: my_s3_connector
+                        - create_secrets_from_connectors:
+                            - my_s3_connector
+                            - my_other_s3_connector
+                    items:
+                        type: string
+                    type:
+                        - string
+                        - array
                 incremental_strategy:
                     description: Strategy to use for incremental updates. Can be 'append', 'merge' or 'partition_overwrite'
                     enum:
@@ -860,6 +872,16 @@ allOf:
                     type: boolean
                 partition_by:
                     description: Column or expression to partition the table by
+                    type: string
+                post_exec:
+                    description: SQL query to run on the output OLAP engine (DuckDB or ClickHouse) after the main query. (optional). Ensure post_exec queries are idempotent. Use IF EXISTS statements when applicable.
+                    examples:
+                        - post_exec: DETACH DATABASE IF EXISTS postgres_db
+                    type: string
+                pre_exec:
+                    description: SQL query to run on the output OLAP engine (DuckDB or ClickHouse) before the main query. (optional). Ensure pre_exec queries are idempotent. Use IF NOT EXISTS statements when applicable.
+                    examples:
+                        - pre_exec: ATTACH IF NOT EXISTS 'dbname=postgres host=localhost port=5432 user=postgres password=postgres' AS postgres_db (TYPE POSTGRES)
                     type: string
                 table:
                     description: Name of the output table. If not specified, the model name is used.
@@ -886,12 +908,12 @@ allOf:
             description: Refers to a customizable timestamp that can be set to check if an object has been updated (optional).
             type: string
         post_exec:
-            description: Refers to a SQL query that is run after the main query, available for DuckDB-based and ClickHouse-based models. (optional). Ensure post_exec queries are idempotent. Use IF EXISTS statements when applicable.
+            description: SQL query to run on the output OLAP engine (DuckDB or ClickHouse) after the main query. (optional). Ensure post_exec queries are idempotent. Use IF EXISTS statements when applicable.
             examples:
                 - post_exec: DETACH DATABASE IF EXISTS postgres_db
             type: string
         pre_exec:
-            description: Refers to SQL queries to run before the main query, available for DuckDB-based and ClickHouse-based models. (optional). Ensure pre_exec queries are idempotent. Use IF NOT EXISTS statements when applicable.
+            description: SQL queries to run on the output OLAP engine (DuckDB or ClickHouse) before the main query. (optional). Ensure pre_exec queries are idempotent. Use IF NOT EXISTS statements when applicable.
             examples:
                 - pre_exec: ATTACH IF NOT EXISTS 'dbname=postgres host=localhost port=5432 user=postgres password=postgres' AS postgres_db (TYPE POSTGRES)
             type: string
@@ -1191,26 +1213,11 @@ definitions:
         type: object
     duckdb:
         properties:
-            create_secrets_from_connectors:
-                description: List of connector names for which temporary secrets should be created before executing the SQL.
-                type:
-                    - string
-                    - array
             format:
                 description: Format of the data source (e.g., csv, json, parquet).
                 type: string
             path:
                 description: Path to the data source.
-                type: string
-            post_exec:
-                description: refers to a SQL query that is run after the main query, available for DuckDB-based and ClickHouse-based models. _(optional)_. Ensure `post_exec` queries are idempotent. Use `IF EXISTS` statements when applicable.
-                examples:
-                    - post_exec: DETACH DATABASE IF EXISTS postgres_db
-                      pre_exec: ATTACH IF NOT EXISTS 'dbname=postgres host=localhost port=5432 user=postgres password=postgres' AS postgres_db (TYPE POSTGRES);
-                      sql: SELECT * FROM postgres_query('postgres_db', 'SELECT * FROM USERS')
-                type: string
-            pre_exec:
-                description: refers to SQL queries to run before the main query, available for DuckDB-based and ClickHouse-based models. _(optional)_. Ensure `pre_exec` queries are idempotent. Use `IF NOT EXISTS` statements when applicable.
                 type: string
         type: object
     gcs:
