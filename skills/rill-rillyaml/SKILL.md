@@ -219,11 +219,85 @@ allOf:
     - description: "Primarily useful for [templating](/developers/build/connectors/templating), variables can be set in the `rill.yaml` file directly. This allows variables to be set for your projects deployed to Rill Cloud while still being able to use different variable values locally if you prefer. \n:::info Overriding variables locally\nVariables also follow an order of precedence and can be overridden locally. By default, any variables defined will be inherited from `rill.yaml`. However, if you manually pass in a variable when starting Rill Developer locally via the CLI, this value will be used instead for the current instance of your running project:\n```bash\nrill start --env numeric_var=100 --env string_var=\"different_value\"\n```\n:::\n:::tip Setting variables through `.env`\nVariables can also be set through your project's `<RILL_PROJECT_HOME>/.env` file (or using the `rill env set` CLI command), such as:\n```bash\nvariable=xyz\n```\nSimilar to how [connector credentials can be pushed / pulled](/developers/build/connectors/credentials#pulling-credentials-and-variables-from-a-deployed-project-on-rill-cloud) from local to cloud or vice versa, project variables set locally in Rill Developer can be pushed to Rill Cloud and/or pulled back to your local instance from your deployed project by using the `rill env push` and `rill env pull` commands respectively.\n:::\n"
       properties:
         env:
-            description: To define a variable in `rill.yaml`, pass in the appropriate key-value pair for the variable under the `env` key
+            description: |
+                A map of key-value pairs for setting variables on your project. It accepts both user-defined variables (for use with templating) and reserved `rill.*` keys that configure project-wide settings. The full set of reserved keys is listed below.
             examples:
                 - env:
-                    numeric_var: 10
-                    string_var: string_value
+                    foo: bar
+                    rill.interactive_sql_row_limit: 5000
+            properties:
+                rill.ai.completion_timeout_seconds:
+                    description: 'Maximum duration of a full AI completion request (which may include multiple LLM calls and tool uses), in seconds. Default: 300.'
+                    type: integer
+                rill.ai.default_query_limit:
+                    description: 'Default row limit applied to AI tool queries when no limit is specified. Default: 25.'
+                    type: integer
+                rill.ai.llm_timeout_seconds:
+                    description: 'Maximum duration of a single LLM completion request, in seconds. Default: 180.'
+                    type: integer
+                rill.ai.max_query_limit:
+                    description: 'Maximum row limit allowed for AI tool queries. Default: 250.'
+                    type: integer
+                rill.ai.max_time_range_days:
+                    description: 'Maximum time range allowed for AI tool queries, in days. Set to 0 for no limit. Default: 0.'
+                    type: integer
+                rill.ai.require_time_range:
+                    description: 'Require AI tool queries to include a time range filter; reject queries without one. Default: true.'
+                    type: boolean
+                rill.alerts.default_streaming_refresh_cron:
+                    description: 'Default cron expression for refreshing alerts that depend on streaming refs (for example, external tables in Druid where new data may arrive at any time). Default: `0 0 * * *` (every 24 hours).'
+                    type: string
+                rill.alerts.fast_streaming_refresh_cron:
+                    description: 'Cron expression for refreshing streaming alerts on always-on OLAP connectors. Default: `*/10 * * * *` (every 10 minutes).'
+                    type: string
+                rill.download_limit_bytes:
+                    description: 'Limit on the size of an exported file, in bytes. Default: 134217728 (128 MB).'
+                    type: integer
+                rill.interactive_sql_row_limit:
+                    description: 'Row limit for interactive SQL queries; does not apply to SQL exports. Default: 10000.'
+                    type: integer
+                rill.metrics.approximate_comparisons:
+                    description: 'Rewrite metrics comparison queries to use an approximate, faster form. Approximate comparisons may not return data points for all values. Default: true.'
+                    type: boolean
+                rill.metrics.approximate_comparisons_cte:
+                    description: 'Rewrite metrics comparison queries to use a CTE for the base query. Default: false.'
+                    type: boolean
+                rill.metrics.approximate_comparisons_two_phase_limit:
+                    description: 'Row-limit threshold under which metrics comparison queries use a two-phase strategy (base values first, comparison values second). Default: 250.'
+                    type: integer
+                rill.metrics.exactify_druid_topn:
+                    description: 'Split Druid TopN queries into two queries to improve measure accuracy, at the cost of performance. Default: false.'
+                    type: boolean
+                rill.metrics.timeseries_null_filling_implementation:
+                    description: 'Null-filling implementation for timeseries queries. One of `none`, `new`, or `pushdown`. Default: `pushdown`.'
+                    type: string
+                rill.model.partitions_warn_on_failure:
+                    description: 'When true, partition execution failures are surfaced as non-blocking warnings instead of errors. Default: true in `prod`, false otherwise.'
+                    type: boolean
+                rill.model.tests_warn_on_failure:
+                    description: 'When true, model test failures are surfaced as non-blocking warnings instead of errors. Default: true in `prod`, false otherwise.'
+                    type: boolean
+                rill.model.timeout_override:
+                    description: 'Timeout for model reconciliation in seconds, used in validation mode. Default: 0 (no override).'
+                    type: integer
+                rill.models.concurrent_execution_limit:
+                    description: 'Maximum number of concurrent model executions. Default: 5.'
+                    type: integer
+                rill.models.default_materialize:
+                    description: 'Materialize models as tables by default instead of views. Default: false.'
+                    type: boolean
+                rill.models.materialize_delay_seconds:
+                    description: 'Delay before materializing models, in seconds. Default: 0.'
+                    type: integer
+                rill.parser.skip_updates_if_parse_errors:
+                    description: 'Short-circuit project parser reconciliation when parse errors exist. Default: false.'
+                    type: boolean
+                rill.strict_model_properties:
+                    description: 'Return an error when a model contains unmapped properties. Default: false.'
+                    type: boolean
+                rill.strict_resolver_properties:
+                    description: 'Return an error when a resolver contains properties not recognized by its implementation. Default: false.'
+                    type: boolean
             type: object
       title: Setting variables
       type: object
