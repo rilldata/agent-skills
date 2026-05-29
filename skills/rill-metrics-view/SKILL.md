@@ -456,6 +456,9 @@ allOf:
         connector:
             description: Refers to the connector type for the metrics view, see [OLAP engines](/developers/build/connectors/olap) for more information
             type: string
+        data_time_range:
+            description: Optional [rilltime](https://docs.rilldata.com/reference/time-syntax) expression describing the base table's time coverage (e.g. `-5Y to now`, `inf`). When set, Rill skips the `min`/`max` OLAP probe for the base table and uses the declared bounds for coverage checks.
+            type: string
         database:
             description: Refers to the database to use in the OLAP engine (to be used in conjunction with table). Otherwise, will use the default database or schema if not specified
             type: string
@@ -653,6 +656,9 @@ allOf:
             description: Pre-aggregated rollup tables that can be used to accelerate queries. When a query's dimensions, measures, time grain, and time range match a rollup, the query is automatically routed to the rollup table instead of the base table.
             items:
                 properties:
+                    data_time_range:
+                        description: Optional [rilltime](https://docs.rilldata.com/reference/time-syntax) expression describing the rollup's time coverage (e.g. `-1Y to now`, `-5Y to -1Y`, `inf`). When set, Rill skips the `min`/`max` OLAP probe for this rollup and uses the declared bounds for coverage checks.
+                        type: string
                     database:
                         description: Refers to the database to use in the OLAP engine
                         type: string
