@@ -233,7 +233,7 @@ allOf:
                     description: 'Default row limit applied to AI tool queries when no limit is specified. Default: 25.'
                     type: integer
                 rill.ai.llm_timeout_seconds:
-                    description: 'Maximum duration of a single LLM completion request, in seconds. Default: 180.'
+                    description: 'Maximum duration of a single LLM completion request, in seconds. Default: 180. Note: when using Rill''s hosted AI service (i.e. not a self-configured LLM), the admin server enforces a hard upper bound of 10 minutes, so values above that have no effect.'
                     type: integer
                 rill.ai.max_query_limit:
                     description: 'Maximum row limit allowed for AI tool queries. Default: 250.'
