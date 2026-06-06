@@ -562,6 +562,9 @@ allOf:
             allow_host_access:
                 description: Enable the BigQuery client to use credentials from the host environment when no service account JSON is provided. This includes Application Default Credentials from environment variables, local credential files, or the Google Compute Engine metadata server. Defaults to true, allowing seamless authentication in GCP environments.
                 type: boolean
+            allow_standard_api:
+                description: Allow querying BigQuery using the standard API instead of the Storage Read API. This is less efficient and may lead to higher latency, but can be used as a fallback if the Storage Read API is not available due to insufficient permissions or other issues.
+                type: boolean
             driver:
                 const: bigquery
                 description: Refers to the driver type and must be driver `bigquery`
