@@ -662,6 +662,9 @@ allOf:
             ssl:
                 description: Indicates whether a secured SSL connection is required
                 type: boolean
+            sync_replicas:
+                description: Controls whether to run `SYSTEM SYNC REPLICA` before replacing partitions on a replicated table in a cluster, ensuring all inserted parts are visible across replicas before the partition swap. Defaults to true
+                type: boolean
             username:
                 description: Username for authentication
                 type: string
