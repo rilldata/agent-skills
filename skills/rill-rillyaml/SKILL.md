@@ -286,6 +286,9 @@ allOf:
                 rill.models.default_materialize:
                     description: 'Materialize models as tables by default instead of views. Default: false.'
                     type: boolean
+                rill.models.disable:
+                    description: 'When true, model execution is disabled. Useful for stopping any ingestion in Rill temporarily. Default: false.'
+                    type: boolean
                 rill.models.materialize_delay_seconds:
                     description: 'Delay before materializing models, in seconds. Default: 0.'
                     type: integer
