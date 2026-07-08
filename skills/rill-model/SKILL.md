@@ -763,7 +763,7 @@ allOf:
             type: string
         connector:
             const: connector
-            description: Refers to the resource type and is needed if setting an explicit OLAP engine. IE `clickhouse`
+            description: Refers to the resource type and is needed when setting an explicit OLAP engine, e.g. `clickhouse`
             type: string
         create_secrets_from_connectors:
             description: List of connector names for which temporary secrets should be created before executing the SQL. This allows DuckDB-based models to access cloud storage (S3, GCS, Azure) using credentials from named connectors.
@@ -843,10 +843,10 @@ allOf:
                                 - VIEW
                                 - DICTIONARY
                             type: string
-            description: to define the properties of output
+            description: Defines the output properties.
             properties:
                 connector:
-                    description: Refers to the connector type for the output table. Can be `clickhouse` or `duckdb` and their named connector
+                    description: Refers to the connector type for the output table. Can be `clickhouse` or `duckdb` and their named connectors.
                     type: string
                 create_secrets_from_connectors:
                     description: List of connector names for which temporary secrets should be created on the output OLAP engine before executing the SQL. Only applies when the output connector is DuckDB. This allows DuckDB-based models to access cloud storage (S3, GCS, Azure) using credentials from named connectors.
@@ -868,7 +868,7 @@ allOf:
                         - partition_overwrite
                     type: string
                 materialize:
-                    description: Whether to materialize the model as a table or view
+                    description: Whether to materialize the model as a table or view.
                     type: boolean
                 partition_by:
                     description: Column or expression to partition the table by
@@ -894,7 +894,7 @@ allOf:
             type: object
         partitions:
             $ref: '#/definitions/data_properties'
-            description: Refers to the how your data is partitioned, cannot be used with state. (optional)
+            description: Refers to how your data is partitioned; cannot be used with state. (optional)
             examples:
                 - partitions:
                     glob: gcs://my_bucket/y=*/m=*/d=*/*.parquet

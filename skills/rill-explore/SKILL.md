@@ -139,7 +139,7 @@ allOf:
         defaults:
             additionalProperties: false
             description: |
-                defines the defaults YAML struct
+                Defines the defaults YAML struct.
                   ```yaml
                   defaults: #define all the defaults within here
                     dimensions:
@@ -154,7 +154,7 @@ allOf:
                   ```
             properties:
                 comparison_dimension:
-                    description: for dimension mode, specify the comparison dimension by name
+                    description: For dimension mode, specify the comparison dimension by name.
                     type: string
                 comparison_mode:
                     description: 'Controls how to compare current data with historical or categorical baselines. Options: `none` (no comparison), `time` (compares with past based on default_time_range), `dimension` (compares based on comparison_dimension values)'
@@ -170,7 +170,7 @@ allOf:
                     $ref: '#/definitions/field_selector_properties'
                     description: Provides the default measures to load on viewing the dashboard
                 time_range:
-                    description: Refers to the default time range shown when a user initially loads the dashboard. The value must be either a valid [ISO 8601 duration](https://en.wikipedia.org/wiki/ISO_8601#Durations) (for example, PT12H for 12 hours, P1M for 1 month, or P26W for 26 weeks) or one of the [Rill ISO 8601 extensions](https://docs.rilldata.com/reference/rill-iso-extensions#extensions)
+                    description: Refers to the default time range shown when a user initially loads the dashboard. The value must be either an [ISO 8601 duration](https://en.wikipedia.org/wiki/ISO_8601#Durations) (for example, PT12H for 12 hours, P1M for 1 month, or P26W for 26 weeks) or one of the [Rill ISO 8601 extensions](https://docs.rilldata.com/reference/rill-iso-extensions#extensions).
                     type: string
             type: object
         description:
@@ -227,7 +227,7 @@ allOf:
                   description: Inline theme configuration.
         time_ranges:
             description: |
-                Overrides the list of default time range selections available in the dropdown. It can be string or an object with a 'range' and optional 'comparison_offsets'
+                Overrides the list of default time range selections available in the dropdown. It can be a string or an object with a 'range' and optional 'comparison_offsets'.
                   ```yaml
                   time_ranges:
                     - PT15M // Simplified syntax to specify only the range

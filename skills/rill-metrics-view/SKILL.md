@@ -495,7 +495,7 @@ allOf:
                         - expression
                 properties:
                     column:
-                        description: a categorical column
+                        description: A categorical column.
                         type: string
                     description:
                         description: a freeform text description of the dimension
@@ -504,7 +504,7 @@ allOf:
                         description: a display name for your dimension
                         type: string
                     expression:
-                        description: a non-aggregate expression such as string_split(domain, '.'). One of column and expression is required but cannot have both at the same time
+                        description: A non-aggregate expression such as string_split(domain, '.'). One of column and expression is required, but cannot have both at the same time.
                         type: string
                     lookup_default_expression:
                         description: an optional SQL expression used as a fallback value when no match is found in the dictionary (maps to `dictGetOrDefault`)
@@ -513,7 +513,7 @@ allOf:
                         description: the primary key column in the lookup dictionary that corresponds to the dimension's `column` in the fact table
                         type: string
                     lookup_table:
-                        description: the name of a ClickHouse dictionary to use for query-time lookups. Use `database.dictionary_name` for dictionaries in a non-default database. All three `lookup_*` fields (`lookup_table`, `lookup_key_column`, `lookup_value_column`) must be specified together. See [Query-Time Joins](/developers/build/metrics-view/dimensions/lookup) for details
+                        description: The name of a ClickHouse dictionary to use for query-time lookups. Use `database.dictionary_name` for dictionaries in a non-default database. All three `lookup_*` fields (`lookup_table`, `lookup_key_column`, `lookup_value_column`) must be specified together. See [Query-Time Joins](/developers/build/metrics-view/dimensions/lookup) for details.
                         type: string
                     lookup_value_column:
                         description: the attribute column in the lookup dictionary whose values will be displayed for this dimension
@@ -527,13 +527,13 @@ allOf:
                             type: string
                         type: array
                     type:
-                        description: 'Dimension type: "geo" for geospatial dimensions, "time" for time dimensions or "categorical" for categorial dimensions. Default is undefined and the type will be inferred instead'
+                        description: 'Dimension type: "geo" for geospatial dimensions, "time" for time dimensions, or "categorical" for categorical dimensions. Default is undefined and the type will be inferred instead.'
                         type: string
                     unnest:
-                        description: if true, allows multi-valued dimension to be unnested (such as lists) and filters will automatically switch to "contains" instead of exact match
+                        description: If true, allows multi-valued dimensions to be unnested (such as lists), and filters will automatically switch to "contains" instead of exact match.
                         type: boolean
                     uri:
-                        description: enable if your dimension is a clickable URL to enable single click navigation (boolean or valid SQL expression)
+                        description: Enable if your dimension is a clickable URL to enable single-click navigation (boolean or valid SQL expression).
                         type:
                             - string
                             - boolean
@@ -574,7 +574,7 @@ allOf:
                         type: string
                     format_d3_locale:
                         description: |
-                            locale configuration passed through to D3, enabling changing the currency symbol among other things. For details, see the docs for D3's formatLocale.
+                            Locale configuration passed through to D3, enabling changes to the currency symbol and other formatting options. For details, see the docs for D3's formatLocale.
                               ```yaml
                               format_d3: "$,"
                               format_d3_locale:
@@ -586,7 +586,7 @@ allOf:
                                 description: the currency symbol
                                 type: array
                             grouping:
-                                description: the grouping of the currency symbol
+                                description: Grouping for the currency symbol.
                                 type: array
                         type: object
                     format_preset:
@@ -612,23 +612,23 @@ allOf:
                         type: string
                     per:
                         $ref: '#/definitions/field_selectors_properties'
-                        description: for per dimensions
+                        description: Dimensions to partition the measure by.
                     requires:
                         $ref: '#/definitions/field_selectors_properties'
-                        description: using an available measure or dimension in your metrics view to set a required parameter, cannot be used with simple measures. See [referencing measures](/developers/build/metrics-view/measures/referencing) for more information.
+                        description: Uses an available measure or dimension in your metrics view to set a required parameter. Cannot be used with simple measures. See [referencing measures](/developers/build/metrics-view/measures/referencing) for more information.
                     tags:
                         description: optional list of tags for categorizing the measure (defaults to empty)
                         items:
                             type: string
                         type: array
                     treat_nulls_as:
-                        description: used to configure what value to fill in for missing time buckets. This also works generally as COALESCING over non empty time buckets.
+                        description: Configures the value to fill in for missing time buckets. This also works generally as COALESCE over non-empty time buckets.
                         type: string
                     type:
                         description: 'Measure calculation type: "simple" for basic aggregations, "derived" for calculations using other measures, or "time_comparison" for period-over-period analysis. Defaults to "simple" unless dependencies exist.'
                         type: string
                     valid_percent_of_total:
-                        description: a boolean indicating whether percent-of-total values should be rendered for this measure
+                        description: Indicates whether percent-of-total values should be rendered for this measure.
                         type: boolean
                     window:
                         anyOf:
