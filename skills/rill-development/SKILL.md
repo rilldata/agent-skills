@@ -190,6 +190,20 @@ Since they repeatedly run a query, they are slightly expensive resources.
 They are usually found downstream of a metrics view in the DAG.
 Most projects don't define reports directly as files; instead, users can define reports using a UI in Rill Cloud.
 
+### Skills
+
+Skills teach Rill's AI agents project-specific practices, such as analysis playbooks (e.g. how to do root-cause analysis for a revenue drop) and business glossaries.
+A skill is a directory containing a `SKILL.md` file that follows the Agent Skills format (https://agentskills.io): YAML front matter followed by a markdown body with the instructions.
+Rill loads skills from `skills/<name>/SKILL.md`, and also from `.agents/skills/<name>/SKILL.md` for compatibility with skills authored for other agent clients.
+The front matter supports these properties:
+- `description:` (required) a short summary used to decide when the skill applies; write it as "what it does + when to use it"
+- `name:` always include it (the Agent Skills format requires it, even though Rill derives it from the directory when omitted); must match the directory name; lowercase letters, numbers and hyphens only
+- `metrics_views:` (optional, Rill extension) list of metrics view names the skill is relevant to; the analyst uses it to decide when to load the skill
+- `agents:` (optional, Rill extension) list of agents the skill applies to, `analyst` and/or `developer`; defaults to `[developer]`, so analysis skills must set `agents: [analyst]`
+- `always_apply:` (optional, Rill extension) if `true`, the skill is loaded up front in every conversation instead of on demand; use for short, broadly applicable guidance such as glossaries
+
+Skill contents are visible to every user who can use AI features in the project, so they must never contain secrets.
+
 ### `rill.yaml`
 
 `rill.yaml` is a required file for project-wide config found at the root directory of a Rill project.
@@ -283,3 +297,5 @@ Avoid these mistakes when developing a project:
 - **Modifying user-provided values:** Never alter literal values the user has written, such as string constants, URLs names, or SQL expressions. Such values are often intentional and changing them silently can break behavior. If you genuinely believe a value is wrong, mention it in your final response instead of editing it.
 - **Inferring properties from names:** Do not add or change a property based on a naming heuristic. For example, do not set or change a dimension's `type: time` just because its column is named `time`; Rill infers dimension and column types from the underlying data. Only set such a property when the documentation calls for it or the user explicitly asks.
 - **Over-fixing when resolving errors:** When your task is to fix a specific error, make the minimal change needed to resolve exactly that error. Do not reformat, rewrite, or "improve" other parts of the file that are not causing the error.
+
+
