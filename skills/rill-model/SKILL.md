@@ -1,9 +1,11 @@
 ---
 name: rill-model
-description: Detailed instructions and examples for developing model resources in Rill
+description: "Creates and configures Rill model YAML and SQL files for data pipelines — source models ingesting from S3, BigQuery, Snowflake, or GCS into DuckDB or ClickHouse, derived models with SQL joins, incremental and partition-based ingestion, materialization, dev partition limits, and refresh schedules. Use when the user needs to create or edit a Rill model, configure cross-connector ETL, set up incremental or partitioned data loading, or write SQL transformations in a Rill project."
 ---
 
 # Instructions for developing a model in Rill
+
+> **Quick reference**: See [REFERENCE.md](REFERENCE.md) for a property lookup table covering all model configuration options.
 
 ## Introduction
 
@@ -19,13 +21,13 @@ Models in Rill are similar to models in dbt, but support additional advanced fea
 
 ### Model categories
 
-When reasoning about a model, consider these attributes:
-
-- **Source model**: References external data, typically reading from a SQL database or object store connector and writing to an OLAP connector.
-- **Derived model**: References other models, usually performing joins or formatting columns to prepare denormalized tables for metrics views and dashboards.
-- **Incremental model**: Contains logic for incrementally loading data, processing only new or changed records.
-- **Partitioned model**: Loads data in well-defined increments (e.g., daily partitions), enabling scalability and idempotent incremental runs.
-- **Materialized model**: Outputs a physical table rather than a SQL view.
+| Category | Description | Typical DAG position |
+|----------|-------------|---------------------|
+| Source | Reads from external connector (SQL DB, object store) into OLAP | Root — no parent models |
+| Derived | Joins/transforms other models for metrics views and dashboards | Middle/leaf — references parent models |
+| Incremental | Processes only new or changed records | Any — uses `incremental: true` |
+| Partitioned | Loads data in well-defined chunks (e.g., daily partitions) | Any — uses `partitions:` |
+| Materialized | Creates a physical table (vs. SQL view) | Any — uses `materialize: true` |
 
 ### Performance considerations
 
@@ -37,14 +39,7 @@ Models are usually expensive resources that can take a long time to run. Create 
 
 ### Generating synthetic data for prototyping
 
-When developing models for prototyping or demonstration purposes where external data sources are not yet available, generate a `SELECT` query that returns realistic synthetic data with these characteristics:
-- Use realistic column names and data types that match typical business scenarios
-- Always include a time/timestamp column for time-series analysis
-- Generate 6-12 months of historical data with approximately 10,000 rows to enable meaningful analysis
-- Space out timestamps realistically across the time period rather than clustering them
-- Use realistic data distributions (e.g., varying quantities, diverse categories, plausible geographic distributions)
-
-Only generate synthetic data when the user explicitly requests mock data or when required external sources don't exist in the project. If real data sources are available, always prefer using them.
+When external data sources are unavailable and the user requests mock data, generate a `SELECT` query returning realistic synthetic data: include a timestamp column, 6-12 months of history (~10,000 rows), realistic distributions, and diverse categories. Always prefer real data sources when available.
 
 ## Materialization
 
@@ -204,6 +199,22 @@ refresh:
 ```
 
 By default, cron refreshes are disabled in local development. If you need to test them locally, add `run_in_dev: true` under `refresh:`.
+
+## Validation and troubleshooting
+
+After creating or editing a model, verify it works correctly:
+
+1. **Check for errors**: Run `rill start` (or use the Rill Developer UI) and verify the model appears without errors in the project status.
+2. **Verify row counts**: For source models, confirm data was ingested by querying the output table (e.g., `SELECT COUNT(*) FROM <model_name>`).
+3. **Test incremental runs**: For incremental models, trigger a second run and verify only new/changed data is processed — check that row counts increase as expected without duplicates.
+4. **Validate partitions**: For partitioned models, verify partition status shows processed partitions. If a partition fails, only that partition needs reprocessing.
+5. **Check dev partitions**: In development, ensure dev partition overrides are limiting data volume as intended before running against full production data.
+
+**Common errors:**
+- Model SQL fails silently → check that the SQL is a plain `SELECT` without trailing semicolons
+- Cross-connector model not materializing → verify `materialize: true` is set (required when input ≠ output connector)
+- Incremental state not updating → ensure the `state:` query runs against the output OLAP connector, not the source connector
+- Partition glob matches nothing → use introspection tools (e.g., `list_bucket_files`) to verify the path pattern
 
 ## Advanced concepts
 
