@@ -145,6 +145,25 @@ allOf:
         ai_instructions:
             description: Extra instructions for LLM/AI features. Used to guide natural language question answering and routing.
             type: string
+        ai_prompts:
+            description: Suggested prompts shown as starters in the project-wide AI chat, and on dashboards that have no `ai_prompts` of their own. Each entry is either a prompt string or an object with `label` and `prompt`. At most 8 distinct entries.
+            items:
+                oneOf:
+                    - description: The prompt. A short label is derived from its first words.
+                      type: string
+                    - additionalProperties: false
+                      description: A prompt with an explicit label.
+                      properties:
+                        label:
+                            description: Short label shown on the prompt's button (at most 40 characters). Derived from the prompt if omitted.
+                            type: string
+                        prompt:
+                            description: The full question sent to the AI when the user picks the prompt.
+                            type: string
+                      required:
+                        - prompt
+                      type: object
+            type: array
         compiler:
             description: Specifies the parser version to use for compiling resources
             type: string

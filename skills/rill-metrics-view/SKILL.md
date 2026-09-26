@@ -762,6 +762,17 @@ allOf:
         parent_measures:
             $ref: '#/definitions/field_selector_properties'
             description: Optional field selectors for measures to inherit from the parent metrics view.
+        query_attributes:
+            additionalProperties:
+                type: string
+            description: |
+                Key-value pairs that Rill attaches to every query the metrics view sends to the OLAP engine, for example to attribute warehouse cost or audit queries by user. Values support templating with user attributes and environment variables, such as `'{{ .user.email }}'` or `'{{ .env.team }}'`, and are resolved for each query. Keys may contain only letters, digits, underscores, hyphens, and dots.
+                How the attributes are delivered depends on the OLAP engine: ClickHouse receives them as query settings, Druid as query context parameters, and Databricks as query tags. Other engines ignore them. See [Query attributes](/developers/build/metrics-view/query-attributes) for details.
+            examples:
+                - query_attributes:
+                    department: '{{ .user.department | default "unknown" }}'
+                    rill_user: '{{ .user.email }}'
+            type: object
         rollups:
             description: Pre-aggregated rollup tables that can be used to accelerate queries. When a query's dimensions, measures, time grain, and time range match a rollup, the query is automatically routed to the rollup table instead of the base table.
             items:

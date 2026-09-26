@@ -142,6 +142,8 @@ Here is a full JSON schema for the explore syntax:
 ```
 allOf:
     - properties:
+        ai_prompts:
+            $ref: '#/definitions/ai_prompts_properties'
         allow_custom_time_range:
             description: Defaults to true, when set to false it will hide the ability to set a custom time range for the user.
             type: boolean
