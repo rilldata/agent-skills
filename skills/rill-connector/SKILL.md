@@ -749,6 +749,9 @@ allOf:
             catalog:
                 description: Default catalog name. Optional.
                 type: string
+            catalog_whitelist:
+                description: Comma-separated list of catalogs to show
+                type: string
             driver:
                 const: databricks
                 description: Refers to the driver type and must be driver `databricks`
