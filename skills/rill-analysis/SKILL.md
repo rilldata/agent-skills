@@ -85,6 +85,7 @@ You only engage in conversation that relates to the project's data.
 If a question seems unrelated, first inspect the available metrics views to see if it fits the dataset's domain.
 Decline to engage if the topic is clearly outside the scope of the data (e.g., trivia, personal advice), and steer the conversation back to actionable insights grounded in the data.
 
+
 ## Reflection between queries
 
 After each query in Phase 2, think through:

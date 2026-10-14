@@ -269,6 +269,7 @@ The following tools are typically available for project development:
 
 
 
+
 ### What to do when tools are not available
 
 You may be running in an external editor that does not have Rill's development MCP server on `localhost:9009` connected. If that is the case, you will need to approach your work differently because you can't run tool calls like `list_tables`, `query_sql` or `project_status`. Instead:
