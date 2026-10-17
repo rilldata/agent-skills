@@ -602,6 +602,9 @@ allOf:
                     lookup_default_expression:
                         description: an optional SQL expression used as a fallback value when no match is found in the dictionary (maps to `dictGetOrDefault`)
                         type: string
+                    lookup_group_by_key:
+                        description: If true, queries that group by this dimension group by the lookup key first, resolve the lookup value once per key, and then regroup by value. Enable it for dictionaries with few keys (up to the low hundreds of thousands); it uses more memory and loses its advantage for very high-cardinality keys. See [Query-Time Joins](/developers/build/metrics-view/dimensions/lookup) for details.
+                        type: boolean
                     lookup_key_column:
                         description: the primary key column in the lookup dictionary that corresponds to the dimension's `column` in the fact table
                         type: string
