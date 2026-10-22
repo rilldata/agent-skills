@@ -1520,6 +1520,147 @@ allOf:
             - driver
           title: S3
           type: object
+        - description: |
+            Connects an external MCP (Model Context Protocol) server so its tools become available to Rill's AI agents.
+            Credentials are either project-scoped (`headers` with `{{ .env.* }}` templating) or per-user (`auth: oauth`, where each user authorizes the server in their browser from the chat).
+          examples:
+            - ai_instructions: Use Linear to look up issues. Search before creating anything.
+              auth: oauth
+              display_name: Linear
+              driver: mcp
+              security:
+                access: '''{{ .user.domain }}'' == ''example.com'''
+                agents:
+                    - analyst
+                exclude:
+                    - if: NOT {{ .user.admin }}
+                      names:
+                        - create_issue
+                        - update_issue
+                        - delete_issue
+              type: connector
+              url: https://mcp.linear.app/mcp
+            - display_name: Company data
+              driver: mcp
+              headers:
+                Authorization: Bearer {{ .env.INTERNAL_MCP_TOKEN }}
+                X-Rill-User: '{{ .user.email }}'
+              type: connector
+              url: https://mcp.internal.example.com/mcp
+          properties:
+            ai_instructions:
+                description: Guidance for AI agents on when and how to use the server's tools
+                type: string
+            auth:
+                description: |
+                    Set to `oauth` for servers that require each user to authorize access in their browser (OAuth 2.1 with PKCE).
+                    Only available in Rill Cloud, where users connect from the chat and each user's token is stored encrypted. Rill Developer lists such servers but cannot connect them.
+                    Cannot be combined with an `Authorization` header.
+                enum:
+                    - oauth
+                type: string
+            connect_timeout:
+                description: Timeout for connecting to the server and listing its tools, as a duration (default `10s`)
+                type: string
+            display_name:
+                description: Human-friendly name for the server, shown in the chat and to AI agents. Defaults to the connector name
+                type: string
+            driver:
+                const: mcp
+                description: Refers to the driver type and must be driver `mcp`
+                type: string
+            headers:
+                additionalProperties:
+                    type: string
+                description: |
+                    HTTP headers sent on every request to the server, such as a project-scoped `Authorization` header.
+                    Values may use `{{ .env.* }}` for secrets and `{{ .user.* }}` to pass attributes of the requesting user (which makes the server usable only by identified users).
+                type: object
+            max_result_bytes:
+                description: Maximum size of a tool result passed to the AI, in bytes. Larger results are truncated (default `131072`)
+                type: integer
+            oauth_client_id:
+                description: Pre-registered OAuth client ID, for authorization servers that do not support dynamic client registration
+                type: string
+            oauth_client_secret:
+                description: Secret of the pre-registered OAuth client. Reference it from `.env` with `{{ .env.* }}` templating rather than committing it
+                type: string
+            oauth_scopes:
+                description: Scopes to request during authorization. Defaults to all scopes the server advertises
+                items:
+                    type: string
+                type: array
+            security:
+                description: |
+                    Controls who may use the server and which of its tools. It uses the same syntax as [metrics view security policies](/developers/build/metrics-view/security),
+                    with tool names in place of dimension and measure names, plus an `agents` field.
+                    Omit the block to allow every user with AI access; a block without `access` denies everyone.
+                properties:
+                    access:
+                        description: Expression indicating whether the user may use the server. Can reference user attributes with `{{ .user.* }}`
+                        oneOf:
+                            - description: SQL expression that evaluates to a boolean to determine access
+                              type: string
+                            - description: Direct boolean value to allow or deny access
+                              type: boolean
+                    agents:
+                        description: AI agents that may use the server's tools. Defaults to all agents
+                        items:
+                            enum:
+                                - analyst
+                                - developer
+                            type: string
+                        type: array
+                    exclude:
+                        description: Tools to deny. A matching exclude always wins over an include
+                        items:
+                            properties:
+                                if:
+                                    description: Templated boolean condition over user attributes
+                                    type: string
+                                names:
+                                    description: Tool names the rule applies to, or `'*'` for all tools
+                                    oneOf:
+                                        - type: string
+                                        - items:
+                                            type: string
+                                          type: array
+                            required:
+                                - if
+                                - names
+                            type: object
+                        type: array
+                    include:
+                        description: Tools each user may call. If any include rule is present, tools not matched by a passing rule are denied
+                        items:
+                            properties:
+                                if:
+                                    description: Templated boolean condition over user attributes
+                                    type: string
+                                names:
+                                    description: Tool names the rule applies to, or `'*'` for all tools
+                                    oneOf:
+                                        - type: string
+                                        - items:
+                                            type: string
+                                          type: array
+                            required:
+                                - if
+                                - names
+                            type: object
+                        type: array
+                type: object
+            timeout:
+                description: Timeout per tool call, as a duration (default `60s`)
+                type: string
+            url:
+                description: URL of the MCP server's streamable HTTP endpoint. Must use `https` in Rill Cloud
+                type: string
+          required:
+            - driver
+            - url
+          title: MCP Server
+          type: object
         - examples:
             - bot_token: '{{ .env.SLACK_BOT_TOKEN }}'
               driver: slack
