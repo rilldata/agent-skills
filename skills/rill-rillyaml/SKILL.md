@@ -293,6 +293,9 @@ allOf:
                 rill.download_limit_bytes:
                     description: 'Limit on the size of an exported file, in bytes. Default: 134217728 (128 MB).'
                     type: integer
+                rill.health.make_live_queries:
+                    description: 'Run live queries against the OLAP (including pings) during health checks. Default: false.'
+                    type: boolean
                 rill.interactive_sql_row_limit:
                     description: 'Row limit for interactive SQL queries; does not apply to SQL exports. Default: 10000.'
                     type: integer
@@ -310,6 +313,9 @@ allOf:
                     type: boolean
                 rill.metrics.druid_mvd_filtered_search:
                     description: 'Extends rill.metrics.druid_mvd_filtered_group_by to dimension search (ILIKE filters) using MV_FILTER_REGEX, so search results contain only values matching the search text. Requires Druid 35.0.0 or newer. Default: false.'
+                    type: boolean
+                rill.metrics.exact_measures:
+                    description: 'Allow queries to compute measures with their `exact_expression` when requested (per measure, with `exact: true`). When false, any query that would compute a measure exactly fails with an error; a flag on a measure without an `exact_expression` stays a no-op. Acts as a kill switch for expensive exact aggregations. Default: true.'
                     type: boolean
                 rill.metrics.exactify_druid_topn:
                     description: 'Split Druid TopN queries into two queries to improve measure accuracy, at the cost of performance. Default: false.'

@@ -119,6 +119,14 @@ measures:
     expression: COUNT(DISTINCT user_id)
     format_preset: humanize
 
+  # Expensive aggregates can define a fast approximate default plus an exact variant.
+  # Dashboards show the approximate value and let viewers switch to the exact one on demand.
+  - name: unique_devices
+    display_name: Unique Devices
+    expression: approx_count_distinct(device_id)
+    exact_expression: COUNT(DISTINCT device_id)
+    format_preset: humanize
+
   - name: conversion_rate
     display_name: Conversion Rate
     expression: SUM(conversions) / NULLIF(SUM(visits), 0)
@@ -661,6 +669,9 @@ allOf:
                         type: string
                     display_name:
                         description: the display name of your measure.
+                        type: string
+                    exact_expression:
+                        description: 'An optional exact variant of `expression` for measures whose default expression is approximate (e.g. `expression: uniq(user_id)` with `exact_expression: uniqExact(user_id)` in ClickHouse, or `approx_count_distinct(user_id)` with `count(DISTINCT user_id)` in DuckDB). Dashboards show the approximate value by default and only use the exact expression when a viewer or query explicitly asks for exact values. It shares all other measure settings with `expression`. Only simple measures without a `window` can define it: derived measures are calculated from the measures as a query computes them.'
                         type: string
                     expression:
                         description: a combination of operators and functions for aggregations
