@@ -1352,8 +1352,30 @@ allOf:
             port:
                 description: Port number for the Postgres server
                 type: string
+            sslcert_pem:
+                description: |
+                    Client certificate contents as raw PEM or standard base64-encoded PEM.
+                    Requires `sslkey_pem` and `verify-full` TLS. Cannot be combined with `dsn` or `database_url`.
+                type: string
+            sslkey_pem:
+                description: |
+                    Matching unencrypted client private key contents as raw PEM or standard base64-encoded PEM.
+                    Requires `sslcert_pem` and `verify-full` TLS. Cannot be combined with `dsn` or `database_url`.
+                    Store this value in a secret project variable.
+
+                    See [PostgreSQL TLS certificates](/developers/build/connectors/data-source/postgres#tls-certificates-in-rill-cloud)
+                    for upload and Cloud configuration instructions.
+                type: string
             sslmode:
-                description: 'ssl mode options: `disable`, `allow`, `prefer` or `require`.'
+                description: |
+                    SSL mode options: `disable`, `allow`, `prefer`, `require`, `verify-ca`, or `verify-full`.
+                    When certificate contents are supplied, defaults to `verify-full`; other modes are rejected.
+                type: string
+            sslrootcert_pem:
+                description: |
+                    CA certificate contents as raw PEM or standard base64-encoded PEM.
+                    Used to verify the PostgreSQL server certificate; omit to use the system trust roots.
+                    Requires individual connection parameters (not `dsn` or `database_url`) and `verify-full` TLS.
                 type: string
             user:
                 description: Username for authentication
