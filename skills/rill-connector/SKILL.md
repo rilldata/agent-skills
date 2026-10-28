@@ -1601,6 +1601,11 @@ allOf:
             max_result_bytes:
                 description: Maximum size of a tool result passed to the AI, in bytes. Larger results are truncated (default `131072`)
                 type: integer
+            oauth_authorization_params:
+                additionalProperties:
+                    type: string
+                description: 'Extra query parameters for the authorization request, for servers that need non-standard ones. For example, Google issues a refresh token only with `access_type: offline`, and only on the first consent unless `prompt: consent` is also set. Changing them requires users to connect again'
+                type: object
             oauth_client_id:
                 description: Pre-registered OAuth client ID, for authorization servers that do not support dynamic client registration
                 type: string
