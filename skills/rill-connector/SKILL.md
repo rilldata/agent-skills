@@ -20,7 +20,7 @@ Each connector uses a **driver** that implements one or more capabilities:
 - **Information schema**: Can list tables and their schemas (e.g., `duckdb`, `bigquery`)
 - **Object store**: Can list, read, and write flat files (e.g., `s3`, `gcs`)
 - **Notifier**: Can send notifications and alerts (e.g., `slack`)
-- **AI**: Can generate embeddings or responses (e.g., `openai`, `claude`, `gemini`)
+- **AI**: Can generate embeddings or responses (e.g., `openai`, `claude`, `gemini`, `bedrock`)
 
 ## Core Concepts
 
@@ -202,6 +202,7 @@ Databricks, as a live OLAP connector or a data source for ingestion. Key propert
 
 - **Slack**: Use `bot_token` for alert notifications
 - **OpenAI**, **Claude**, or **Gemini**: Use `api_key` for AI-powered features; optionally set `model` to override the default
+- **Bedrock**: Amazon Bedrock models in the user's own AWS account. Requires `model` (a model ID, inference profile ID, or ARN) and usually `region`; authenticate with either `api_key` (a long-term Bedrock API key, which only works in the region it was generated in) or `aws_access_key_id` and `aws_secret_access_key` (optionally with `aws_role_arn`), but not both
 - **HTTPS**: Simple connector for public HTTP sources
 - **Pinot**: Use `broker_host`, `controller_host`, `username`, `password`
 
@@ -481,6 +482,20 @@ api_key: "{{ .env.claude_api_key }}"
 type: connector
 driver: gemini
 api_key: "{{ .env.gemini_api_key }}"
+```
+
+### Bedrock
+
+```yaml
+# connectors/bedrock.yaml
+type: connector
+driver: bedrock
+model: us.anthropic.claude-sonnet-4-5-20250929-v1:0
+region: us-east-1
+api_key: "{{ .env.bedrock_api_key }}"
+# Or use AWS access keys instead of an API key:
+# aws_access_key_id: "{{ .env.bedrock_aws_access_key_id }}"
+# aws_secret_access_key: "{{ .env.bedrock_aws_secret_access_key }}"
 ```
 
 ### Slack
@@ -1184,6 +1199,61 @@ allOf:
           title: Gemini
           type: object
         - examples:
+            - aws_access_key_id: '{{ .env.AWS_ACCESS_KEY_ID }}'
+              aws_secret_access_key: '{{ .env.AWS_SECRET_ACCESS_KEY }}'
+              driver: bedrock
+              model: us.anthropic.claude-sonnet-4-5-20250929-v1:0
+              region: us-east-1
+              type: connector
+            - api_key: '{{ .env.BEDROCK_API_KEY }}'
+              driver: bedrock
+              model: us.anthropic.claude-sonnet-4-5-20250929-v1:0
+              region: us-east-1
+              type: connector
+          properties:
+            api_key:
+                description: Amazon Bedrock API key. Use either an API key or AWS access keys; they cannot be combined.
+                type: string
+            aws_access_key_id:
+                description: AWS Access Key ID used for authentication. Required unless using an API key or running locally with host credentials.
+                type: string
+            aws_access_token:
+                description: AWS session token used with temporary credentials. Required only if the Access Key and Secret Key are part of temporary session credentials.
+                type: string
+            aws_external_id:
+                description: External ID required by some roles when assuming them, typically for cross-account access. Used only if 'aws_role_arn' is specified.
+                type: string
+            aws_role_arn:
+                description: ARN of the IAM role to assume. When specified, the base credentials are used to call STS AssumeRole and obtain temporary credentials scoped to this role.
+                type: string
+            aws_role_session_name:
+                description: Session name to associate with the STS AssumeRole session. Used only if 'aws_role_arn' is specified.
+                type: string
+            aws_secret_access_key:
+                description: AWS Secret Access Key paired with the Access Key ID.
+                type: string
+            driver:
+                const: bedrock
+                description: The driver type, must be set to "bedrock"
+                type: string
+            max_tokens:
+                description: Maximum number of tokens in the response. Defaults to the model's maximum.
+                type: number
+            model:
+                description: The Bedrock model ID, inference profile ID, or ARN to use (e.g., 'us.anthropic.claude-sonnet-4-5-20250929-v1:0'). The model must support tool use and structured outputs in the Bedrock Converse API.
+                type: string
+            region:
+                description: Optional AWS region to call Bedrock in (e.g., us-east-1). Defaults to 'us-east-1' if not specified. When using a long-term API key, this must be the region the key was generated in.
+                type: string
+            temperature:
+                description: Sampling temperature to use (e.g., 0.1). Defaults to the model's default. Leave unset for models that don't support it, such as reasoning models.
+                type: number
+          required:
+            - driver
+            - model
+          title: Bedrock
+          type: object
+        - examples:
             - broker_host: localhost
               broker_port: 9000
               controller_host: localhost
@@ -1817,6 +1887,7 @@ description: |
     - [**Claude**](#claude) - Claude connector for chat with your own API key
     - [**OpenAI**](#openai) - OpenAI connector for chat with your own API key
     - [**Gemini**](#gemini) - Gemini connector for chat with your own API key
+    - [**Bedrock**](#bedrock) - Amazon Bedrock connector for chat with models in your own AWS account
     - [**Slack**](#slack) - Slack data
 
     ### _Other_
