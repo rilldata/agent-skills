@@ -1127,7 +1127,7 @@ allOf:
                 description: The OpenAI model to use (e.g., 'gpt-4o')
                 type: string
             reasoning_effort:
-                description: Constrains effort on reasoning for reasoning models (e.g., 'low', 'medium', 'high')
+                description: Constrains effort on reasoning for reasoning models (e.g., 'low', 'medium', 'high'). Set this when using a model that reasons by default, since Rill otherwise sends a temperature of 0.1, which reasoning models reject.
                 type: string
           required:
             - api_key
@@ -1154,8 +1154,11 @@ allOf:
             model:
                 description: The Claude model to use (e.g., 'claude-opus-4-5')
                 type: string
+            prompt_caching:
+                description: Cache the tools, system prompt, and conversation between requests (default false). Cache reads cost a fraction of the input price, which typically lowers cost for AI chat, but cache writes cost more than the input price.
+                type: boolean
             temperature:
-                description: Sampling temperature to use (e.g., 0.0)
+                description: Sampling temperature to use (e.g., 0.0). Defaults to the model's default. Leave unset for models that don't support it, such as Claude Opus 4.7 and later.
                 type: number
           required:
             - api_key
@@ -1183,7 +1186,7 @@ allOf:
                 description: The Gemini model to use (e.g., 'gemini-2.5-pro-preview-05-06')
                 type: string
             temperature:
-                description: Sampling temperature to use (0.0-2.0)
+                description: Sampling temperature to use (0.0-2.0). Defaults to the model's default, which Google recommends keeping for Gemini 3 models.
                 type: number
             thinking_level:
                 description: Level of 'thinking' for the model's response (e.g., 'MINIMAL', 'LOW', 'MEDIUM', 'HIGH'). Default is 'LOW'.
