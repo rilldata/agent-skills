@@ -1,6 +1,10 @@
 {
   "mcpServers": {
-    "rill-developer": {
+    "rill": {
+      "type": "http",
+      "url": "https://api.rilldata.com/v1/mcp"
+    },
+    "rill-local": {
       "type": "http",
       "url": "http://localhost:9009/mcp"
     }
