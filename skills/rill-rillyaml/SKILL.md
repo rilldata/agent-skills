@@ -379,6 +379,23 @@ allOf:
       title: Managing Paths in Rill
       type: object
     - description: |
+        The `embeds` property configures [embedded dashboards](/developers/embed). Use `open_url` to give emails from reports created in an embed a link back to your application.
+      properties:
+        embeds:
+            additionalProperties: false
+            description: Configuration for embedded dashboards
+            examples:
+                - embeds:
+                    open_url: https://app.example.com/analytics/open
+            properties:
+                open_url:
+                    description: Base URL for open links in emails sent by reports created from an embed. Only the report's creator gets the link. It should be a page in your application that runs your embed integration. Rill keeps the URL as-is and appends a `rill_open` parameter to its query string (before any fragment), which the page should pass as `open` when calling `GetIFrame`. Must be an absolute `http` or `https` URL without a `rill_open` parameter.
+                    format: uri
+                    type: string
+            type: object
+      title: Embedding
+      type: object
+    - description: |
         During development, it is always a good idea to check if your [access policies](/developers/build/metrics-view/security) are behaving the way you designed them to before pushing these changes into production. You can set mock users, which enables a drop-down in the dashboard preview to view as a specific user.
         :::info The View as selector is not visible in my dashboard, why?
         This feature is _only_ enabled when you have set a security policy on the dashboard. By default, the dashboard and its contents are viewable by every user.

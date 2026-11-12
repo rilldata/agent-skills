@@ -829,6 +829,11 @@ allOf:
         table:
             description: Refers to the table powering the dashboard, should be used instead of model for dashboards create from external OLAP tables (either table or model is required)
             type: string
+        time_grains:
+            description: Time grains offered by dashboards for bucketing the time dimension. Accepts the standard grains (second, minute, hour, day, week, month, quarter, year) and the multiples 5m, 10m, 15m, 30m, 2h, 3h, 4h, 6h, 8h and 12h (also spelled like `10 minutes`). When set, it replaces the default list, which is the standard grains at or above `smallest_time_grain`. Multiples are aligned to the start of the day in the dashboard time zone.
+            items:
+                type: string
+            type: array
         timeseries:
             description: Refers to the timestamp column from your model that will underlie x-axis data in the line charts. If not specified, the line charts will not appear
             type: string
